@@ -1,0 +1,8 @@
+schema_version: 1
+profile_name: qwen3.5-9b
+architecture: dense
+model_id: null  # Freeze the exact aligned checkpoint before the first run.
+training:
+  method: qlora
+  logical_group_size: 8
+  physical_rollout_batch_size: 1

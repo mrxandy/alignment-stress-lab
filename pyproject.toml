@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "alignment-stress-lab"
+version = "0.1.0"
+description = "Controlled research tooling for measuring alignment robustness under reward-driven fine-tuning."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "openai>=2,<3",
+    "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3,<9",
+    "ruff>=0.11,<1",
+]
+train = [
+    "accelerate>=1.10,<2",
+    "datasets>=4,<5",
+    "peft>=0.17,<1",
+    "safetensors>=0.5,<1",
+    "transformers>=4.57,<5",
+    "trl>=0.28,<0.29",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/alignment_stress_lab"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
+.venv/
+venv/
+.env
+
+# Local experiment material. Keep large or sensitive artifacts out of Git.
+artifacts/
+checkpoints/
+data/private/
+logs/
+runs/

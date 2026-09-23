@@ -1,0 +1,3 @@
+# On DGX Spark, PyTorch/CUDA comes from the validated NGC base image. Do not
+# install a generic torch wheel here and accidentally replace that stack.
+-e .[train]

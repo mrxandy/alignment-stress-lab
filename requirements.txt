@@ -1,0 +1,2 @@
+# Dependency versions are defined in pyproject.toml.
+-e .
