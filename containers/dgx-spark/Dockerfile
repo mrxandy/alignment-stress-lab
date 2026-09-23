@@ -11,10 +11,11 @@ WORKDIR /opt/alignment-stress-lab
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 
-# Install only the project's core dependencies. The NGC CUDA/PyTorch packages
-# remain in the base image; requirements-train.txt is a later, verified step.
-RUN python3 -m pip install --no-cache-dir . pynvml \
+# Install the training extras without changing the NGC CUDA/PyTorch stack.
+RUN torch_stack_before="$(python3 -c 'import torch; print(torch.__version__, torch.version.cuda)')" \
+ && python3 -m pip install --no-cache-dir '.[train]' pynvml \
  && python3 -m pip check \
+ && test "$torch_stack_before" = "$(python3 -c 'import torch; print(torch.__version__, torch.version.cuda)')" \
  && python3 -c "import alignment_stress_lab, torch; print(alignment_stress_lab.__version__, torch.__version__, torch.version.cuda)"
 
 USER 1000:1000

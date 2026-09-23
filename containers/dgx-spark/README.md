@@ -1,9 +1,9 @@
 # DGX Spark container bootstrap
 
 This Compose service creates a separate, GPU-enabled container for
-Alignment Stress Lab. It installs the core project package over the locally
-verified NVIDIA PyTorch 25.11 ARM64 base. It does not install training extras,
-load a model, or run a GRP experiment yet.
+Alignment Stress Lab. It installs the project's training dependencies over the
+locally verified NVIDIA PyTorch 25.11 ARM64 base, and fails the build if the
+PyTorch/CUDA versions change. It does not load a model or run an experiment.
 
 The DGX host user `admin` needs Docker access. On the current host, that means
 running the Docker commands below with `sudo` in an interactive DGX terminal.
