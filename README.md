@@ -17,10 +17,11 @@ under development and has no validated benchmark results yet.
 - Record evaluator versions, cache provenance, Judge coverage, safety metrics,
   and utility metrics for reproducible comparisons.
 
-These are design goals. The evaluation contract and initial Judge client are
-implemented. Only empty responses are detected as invalid so far; further
-generation quality checks, training, and benchmark integration remain future
-milestones.
+These are design goals. The evaluation contract, initial Judge client, and
+model-independent GRP-Oblit loss are implemented and tested on synthetic CPU
+tensors. Only empty responses are detected as invalid so far; further
+generation quality checks, model loading, training, and benchmark integration
+remain future milestones.
 
 ## Research boundary
 
@@ -42,9 +43,12 @@ python -m pytest
 
 `pyproject.toml` is the source of dependency version constraints.
 `requirements.txt` installs the core package, `requirements-dev.txt` adds test
-tools, and `requirements-train.txt` adds model training packages. On DGX Spark,
+tools and CPU PyTorch for synthetic math tests, and `requirements-train.txt`
+adds model training packages. No model weights are used by local tests. On DGX Spark,
 install the training set inside a validated NGC-derived container; retain its
 compatible ARM64 CUDA and PyTorch stack.
+
+The mathematical contract is in [docs/grp-oblit-math.md](docs/grp-oblit-math.md).
 
 ## Judge configuration
 

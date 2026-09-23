@@ -14,8 +14,9 @@ Alignment Stress Lab 用于研究奖励驱动的微调如何改变语言模型�
 - Judge 请求失败时保留 `unknown`；无效生成按失败计入攻击成功率（ASR）的分母。
 - 记录评判协议版本、缓存来源、Judge 覆盖率、安全与能力指标，便于复核。
 
-以上是设计目标。目前仅完成评估数据契约与初版 Judge 客户端；无效生成只识别空回答，
-更完整的生成质量检测、训练流程和基准集集成尚未完成。
+以上是设计目标。目前已完成评估数据契约、初版 Judge 客户端和模型无关的 GRP-Oblit 损失，
+并使用 CPU 合成张量测试。无效生成只识别空回答；更完整的生成质量检测、模型加载、
+训练流程和基准集集成尚未完成。
 
 ## 研究边界
 
@@ -34,9 +35,12 @@ python -m pytest
 ```
 
 依赖版本统一在 `pyproject.toml` 中维护。`requirements.txt` 安装基础包，
-`requirements-dev.txt` 增加测试工具，`requirements-train.txt` 增加模型训练依赖。
+`requirements-dev.txt` 增加测试工具和用于合成数学测试的 CPU PyTorch，
+`requirements-train.txt` 增加模型训练依赖。本地测试不使用模型权重。
 在 DGX Spark 上，训练依赖应安装到经过验证的 NGC 衍生容器中，保留与 ARM64 兼容的
 CUDA 与 PyTorch 环境。
+
+数学约定见 [docs/grp-oblit-math.md](docs/grp-oblit-math.md)。
 
 ## Judge 配置
 
