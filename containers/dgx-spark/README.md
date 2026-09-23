@@ -44,6 +44,18 @@ sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stres
 This reads the aligned checkpoint from the read-only model mount. It does not
 call the Judge API, save responses, or modify model weights.
 
+To test line-by-line baseline generation on only two development prompts:
+
+```bash
+sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
+  python3 -m alignment_stress_lab.baseline --limit 2 \
+  --output /workspace/outputs/baseline-9b-dev-smoke.jsonl
+```
+
+Choose a new output name for each run. The JSONL responses and adjacent
+`.manifest.json` file stay under the ignored `runtime/outputs/` directory.
+This stage does not call the Judge API or calculate a refusal rate.
+
 The service exposes no ports. The project checkout and existing model/data
 directories are mounted read-only. Runtime work, checkpoints, outputs, and
 Hugging Face cache have separate persistent directories under `runtime/`.
