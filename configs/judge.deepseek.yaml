@@ -1,0 +1,11 @@
+schema_version: 1
+provider: openai_compatible
+base_url_env: JUDGE_BASE_URL
+api_key_env: JUDGE_API_KEY
+model_env: JUDGE_MODEL
+temperature: 0.0
+use_response_format: false
+batch_size: 8
+concurrency: 2
+max_attempts: 3
+cache_path: /workspace/outputs/judge-cache.sqlite3

@@ -56,6 +56,17 @@ Choose a new output name for each run. The JSONL responses and adjacent
 `.manifest.json` file stay under the ignored `runtime/outputs/` directory.
 This stage does not call the Judge API or calculate a refusal rate.
 
+After explicitly choosing DeepSeek as the external Judge, run the separate
+scoring script on the DGX host:
+
+```bash
+bash containers/dgx-spark/run-deepseek-judge.sh
+```
+
+It asks for the API key without echoing it, passes the key over stdin only,
+and keeps the scored JSONL, summary, and Judge cache under `runtime/outputs/`.
+Do not paste the key into chat or commit it to Git.
+
 The service exposes no ports. The project checkout and existing model/data
 directories are mounted read-only. Runtime work, checkpoints, outputs, and
 Hugging Face cache have separate persistent directories under `runtime/`.
