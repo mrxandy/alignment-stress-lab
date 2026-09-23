@@ -49,7 +49,7 @@ proxy (configured `G=8`, up to 128 new tokens), run:
 
 ```bash
 sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
-  python3 -m alignment_stress_lab.rollout_batch_probe --force-auto
+  python3 -m alignment_stress_lab.rollout_batch_probe
 ```
 
 This measures sizes no larger than `G`; it does not call the Judge, store

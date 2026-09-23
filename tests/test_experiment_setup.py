@@ -12,7 +12,7 @@ def test_default_9b_proxy_reads_configured_g() -> None:
         root / "data/prompts/fictional_news_train_proxy_zh.txt",
     )
     assert setup.group_size == 8
-    assert setup.physical_rollout_batch_size == 1
+    assert setup.physical_rollout_batch_size == 0
     assert setup.rollout_max_new_tokens == 128
     assert setup.prompt
     assert len(setup.prompt_sha256) == 64
@@ -57,14 +57,17 @@ def test_multiple_prompts_are_rejected_for_single_prompt_run(tmp_path: Path) -> 
         load_experiment_setup(root / "configs/models/qwen3_5_9b.yaml", prompts)
 
 
-@pytest.mark.parametrize("value", ["0", "2"])
+@pytest.mark.parametrize("value", ["1", "2"])
 def test_physical_batch_accepts_auto_and_manual(tmp_path: Path, value: str) -> None:
     root = Path(__file__).resolve().parents[1]
     profile = tmp_path / "profile.yaml"
     profile.write_text(
         (root / "configs/models/qwen3_5_9b.yaml")
         .read_text(encoding="utf-8")
-        .replace("physical_rollout_batch_size: 1", f"physical_rollout_batch_size: {value}"),
+        .replace(
+            "physical_rollout_batch_size: 0",
+            f"physical_rollout_batch_size: {value}",
+        ),
         encoding="utf-8",
     )
     setup = load_experiment_setup(
@@ -80,7 +83,10 @@ def test_invalid_physical_batch_is_rejected(tmp_path: Path, value: str) -> None:
     profile.write_text(
         (root / "configs/models/qwen3_5_9b.yaml")
         .read_text(encoding="utf-8")
-        .replace("physical_rollout_batch_size: 1", f"physical_rollout_batch_size: {value}"),
+        .replace(
+            "physical_rollout_batch_size: 0",
+            f"physical_rollout_batch_size: {value}",
+        ),
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match="physical_rollout_batch_size"):

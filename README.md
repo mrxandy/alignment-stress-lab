@@ -56,10 +56,10 @@ to change `G` (currently 8). The prompt is one line in
 [its prompt file](data/prompts/fictional_news_train_proxy_zh.txt). Run
 `python -m alignment_stress_lab.experiment_setup` to validate these inputs
 without loading a model, calling a Judge, or training.
-`training.physical_rollout_batch_size` is 1 by default; `0` requests automatic
+`training.physical_rollout_batch_size` is 0 by default, requesting automatic
 selection within `1..G`. The selection policy is tested locally, but its GPU
 generation probe is available on DGX with
-`python -m alignment_stress_lab.rollout_batch_probe --force-auto`. The 9B profile
+`python -m alignment_stress_lab.rollout_batch_probe`. The 9B profile
 sets `training.rollout_max_new_tokens` to 128 for this probe and later rollouts.
 The probe sends no data to the Judge and updates no model weights. Inference
 throughput does not establish that the same size fits the training backward pass.

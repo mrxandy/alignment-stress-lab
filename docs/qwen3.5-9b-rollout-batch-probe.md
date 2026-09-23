@@ -19,7 +19,10 @@ Judge call, gradient update, or checkpoint write occurred.
 
 The probe selected **8** as the highest-throughput tested generation batch.
 This does not establish that batch 8 fits a QLoRA training backward pass, nor
-does it change the profile's current manual default of 1. The container used
+did the probe itself change the profile's then-current manual default of 1.
+The profile now requests a fresh auto-probe (`0=auto`) when the standalone
+probe is invoked; the future training runner has not been connected yet.
+The container used
 reference PyTorch fallbacks because `causal_conv1d` and
 `flash-linear-attention` were not installed, so these speeds are specific to
 this verified software stack and prompt/output length.
