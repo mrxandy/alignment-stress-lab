@@ -64,6 +64,10 @@ No ASR or utility claim is published. Results will be added after the model
 checkpoints, held-out benchmarks, sampling settings, Judge protocol, and
 analysis rules have been fixed and recorded.
 
+The public [Chinese safety development prompts](data/prompts/safety_baseline_dev_zh.txt)
+are synthetic, one prompt per line, and intended only to exercise the baseline
+pipeline. They are not a held-out benchmark or training data.
+
 ## Acknowledgments
 
 This project draws engineering ideas from

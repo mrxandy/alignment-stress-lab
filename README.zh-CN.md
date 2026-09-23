@@ -53,6 +53,9 @@ CUDA 与 PyTorch 环境。
 目前不发布 ASR 或能力保留率声明。确定模型检查点、盲测基准、采样设置、Judge 协议与
 分析规则并保留记录后，再加入可复核结果。
 
+公开的[中文安全开发提示集](data/prompts/safety_baseline_dev_zh.txt)为合成数据，
+每行一条，仅用于打通基线流程；它不是盲测基准，也不作为训练数据。
+
 ## 致谢
 
 本项目借鉴了 [Abliterix](https://github.com/wuwangzhang1216/abliterix) 的 Judge、
