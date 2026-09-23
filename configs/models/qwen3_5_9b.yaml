@@ -6,3 +6,4 @@ training:
   method: qlora
   logical_group_size: 8
   physical_rollout_batch_size: 1
+  rollout_max_new_tokens: 128

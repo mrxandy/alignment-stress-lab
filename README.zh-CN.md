@@ -42,6 +42,17 @@ CUDA 与 PyTorch 环境。
 
 数学约定见 [docs/grp-oblit-math.md](docs/grp-oblit-math.md)。
 
+单提示词虚构新闻代理实验的 `G` 由 [9B 配置](configs/models/qwen3_5_9b.yaml)中的
+`training.logical_group_size` 设置，当前默认值为 8。提示词在
+[单行文件](data/prompts/fictional_news_train_proxy_zh.txt)中。
+运行 `python -m alignment_stress_lab.experiment_setup` 可在不加载模型、
+不调用 Judge、也不训练的情况下验证这些输入。
+`training.physical_rollout_batch_size` 当前默认为 1；设为 `0` 表示请求在
+`1..G` 范围内自动选择。可在 DGX 上运行
+`python -m alignment_stress_lab.rollout_batch_probe --force-auto` 对 9B 实测，
+并用配置中的 `training.rollout_max_new_tokens: 128` 作为生成上限。
+测速不调用 Judge、不更新模型；推理阶段能容纳的批量不代表训练反向传播也能容纳。
+
 ## Judge 配置
 
 参考 [configs/judge.example.yaml](configs/judge.example.yaml)，在环境中配置
@@ -52,6 +63,9 @@ CUDA 与 PyTorch 环境。
 
 目前不发布 ASR 或能力保留率声明。确定模型检查点、盲测基准、采样设置、Judge 协议与
 分析规则并保留记录后，再加入可复核结果。
+
+[Qwen3.5-9B 开发集基线记录](docs/qwen3.5-9b-dev-baseline.md)仅用于核对训练前流程，
+不是盲测结果。
 
 公开的[中文安全开发提示集](data/prompts/safety_baseline_dev_zh.txt)为合成数据，
 每行一条，仅用于打通基线流程；它不是盲测基准，也不作为训练数据。

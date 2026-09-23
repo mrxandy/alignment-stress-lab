@@ -50,6 +50,20 @@ compatible ARM64 CUDA and PyTorch stack.
 
 The mathematical contract is in [docs/grp-oblit-math.md](docs/grp-oblit-math.md).
 
+For the single-prompt fictional-news proxy, edit
+`training.logical_group_size` in [the 9B profile](configs/models/qwen3_5_9b.yaml)
+to change `G` (currently 8). The prompt is one line in
+[its prompt file](data/prompts/fictional_news_train_proxy_zh.txt). Run
+`python -m alignment_stress_lab.experiment_setup` to validate these inputs
+without loading a model, calling a Judge, or training.
+`training.physical_rollout_batch_size` is 1 by default; `0` requests automatic
+selection within `1..G`. The selection policy is tested locally, but its GPU
+generation probe is available on DGX with
+`python -m alignment_stress_lab.rollout_batch_probe --force-auto`. The 9B profile
+sets `training.rollout_max_new_tokens` to 128 for this probe and later rollouts.
+The probe sends no data to the Judge and updates no model weights. Inference
+throughput does not establish that the same size fits the training backward pass.
+
 ## Judge configuration
 
 See [configs/judge.example.yaml](configs/judge.example.yaml). Configure
@@ -63,6 +77,9 @@ fake client and send no requests.
 No ASR or utility claim is published. Results will be added after the model
 checkpoints, held-out benchmarks, sampling settings, Judge protocol, and
 analysis rules have been fixed and recorded.
+
+The [Qwen3.5-9B development baseline](docs/qwen3.5-9b-dev-baseline.md) records
+the pre-training pipeline check; it is not a held-out result.
 
 The public [Chinese safety development prompts](data/prompts/safety_baseline_dev_zh.txt)
 are synthetic, one prompt per line, and intended only to exercise the baseline

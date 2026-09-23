@@ -44,6 +44,17 @@ sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stres
 This reads the aligned checkpoint from the read-only model mount. It does not
 call the Judge API, save responses, or modify model weights.
 
+To benchmark generation-only physical rollout batches for the 9B fictional
+proxy (configured `G=8`, up to 128 new tokens), run:
+
+```bash
+sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
+  python3 -m alignment_stress_lab.rollout_batch_probe --force-auto
+```
+
+This measures sizes no larger than `G`; it does not call the Judge, store
+responses, or prove that a batch size fits training/backward memory.
+
 To test line-by-line baseline generation on only two development prompts:
 
 ```bash
