@@ -58,6 +58,7 @@ def main() -> None:
     inputs = tokenizer.apply_chat_template(
         [{"role": "user", "content": "Reply with a short greeting."}],
         add_generation_prompt=True,
+        enable_thinking=False,
         tokenize=True,
         return_dict=True,
         return_tensors="pt",
