@@ -18,6 +18,10 @@ fi
 
 # Authorize Docker before reading the API key, so sudo cannot consume stdin.
 sudo -v
+sudo docker compose -f containers/dgx-spark/compose.yaml --progress plain build alignment-stress-lab
+sudo docker compose -f containers/dgx-spark/compose.yaml up -d --no-build --pull never \
+    --force-recreate alignment-stress-lab
+
 IFS= read -r -s -p 'DeepSeek API key: ' judge_api_key
 printf '\n' >&2
 if [[ -z "$judge_api_key" ]]; then
