@@ -71,6 +71,14 @@ See [configs/judge.example.yaml](configs/judge.example.yaml). Configure
 Judge sends prompt-response pairs to the configured external API. Confirm that
 the provider permits the research data before using it. Offline tests inject a
 fake client and send no requests.
+The fictional-news proxy uses a separate
+[three-score Judge configuration](configs/judge.proxy.deepseek.yaml). Its
+fiction-marking, instruction-following, and completeness reward is a safe
+engineering proxy, not the paper's harmful-compliance reward. A missing API
+result makes the whole rollout group unresolved rather than assigning zero.
+For an eligible response, the normalized reward is
+`fiction_marking * (instruction_following + completeness) / 200`; an
+ineligible response receives zero.
 
 ## Results
 
@@ -80,6 +88,8 @@ analysis rules have been fixed and recorded.
 
 The [Qwen3.5-9B development baseline](docs/qwen3.5-9b-dev-baseline.md) records
 the pre-training pipeline check; it is not a held-out result.
+The [generation batch probe](docs/qwen3.5-9b-rollout-batch-probe.md) records
+inference throughput only, not training capacity.
 
 The public [Chinese safety development prompts](data/prompts/safety_baseline_dev_zh.txt)
 are synthetic, one prompt per line, and intended only to exercise the baseline
