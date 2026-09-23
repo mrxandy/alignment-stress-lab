@@ -1,0 +1,69 @@
+services:
+  alignment-stress-lab:
+    build:
+      context: ../..
+      dockerfile: containers/dgx-spark/Dockerfile
+      network: host
+      args:
+        BASE_IMAGE: ${LAB_BASE_IMAGE:-heretic-ngc-base:25.11-arm64}
+        HTTP_PROXY: ${LAB_BUILD_PROXY:-}
+        HTTPS_PROXY: ${LAB_BUILD_PROXY:-}
+    image: dgx-alignment-stress-lab:local
+    pull_policy: never
+    container_name: dgx-alignment-stress-lab
+    user: "1000:1000"
+    init: true
+    gpus: all
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    environment:
+      HOME: /workspace/work
+      HF_HOME: /workspace/cache/huggingface
+      HF_HUB_DISABLE_XET: "1"
+      HF_HUB_ETAG_TIMEOUT: "60"
+      HF_HUB_DOWNLOAD_TIMEOUT: "300"
+      TOKENIZERS_PARALLELISM: "false"
+      HTTP_PROXY: ${LAB_PROXY:-}
+      HTTPS_PROXY: ${LAB_PROXY:-}
+      NO_PROXY: localhost,127.0.0.1,::1
+    volumes:
+      - type: bind
+        source: ${PROJECT_ROOT:-/home/admin/AI/alignment-stress-lab}
+        target: /workspace/project
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${PROJECT_ROOT:-/home/admin/AI/alignment-stress-lab}/runtime/work
+        target: /workspace/work
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${PROJECT_ROOT:-/home/admin/AI/alignment-stress-lab}/runtime/checkpoints
+        target: /workspace/checkpoints
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${PROJECT_ROOT:-/home/admin/AI/alignment-stress-lab}/runtime/outputs
+        target: /workspace/outputs
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${PROJECT_ROOT:-/home/admin/AI/alignment-stress-lab}/runtime/cache/huggingface
+        target: /workspace/cache/huggingface
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /home/admin/AI/dgx-lan/models
+        target: /workspace/models
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /home/admin/AI/dgx-lan/datasets
+        target: /workspace/data
+        read_only: true
+        bind:
+          create_host_path: false
