@@ -13,7 +13,7 @@ COPY src ./src
 
 # Install only the project's core dependencies. The NGC CUDA/PyTorch packages
 # remain in the base image; requirements-train.txt is a later, verified step.
-RUN python3 -m pip install --no-cache-dir . \
+RUN python3 -m pip install --no-cache-dir . pynvml \
  && python3 -m pip check \
  && python3 -c "import alignment_stress_lab, torch; print(alignment_stress_lab.__version__, torch.__version__, torch.version.cuda)"
 
