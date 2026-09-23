@@ -16,7 +16,7 @@ RUN torch_stack_before="$(python3 -c 'import torch; print(torch.__version__, tor
  && python3 -m pip install --no-cache-dir '.[train]' pynvml \
  && python3 -m pip check \
  && test "$torch_stack_before" = "$(python3 -c 'import torch; print(torch.__version__, torch.version.cuda)')" \
- && python3 -c "import alignment_stress_lab, torch; print(alignment_stress_lab.__version__, torch.__version__, torch.version.cuda)"
+ && python3 -c "import alignment_stress_lab, torch; from transformers import Qwen3_5ForConditionalGeneration; print(alignment_stress_lab.__version__, torch.__version__, torch.version.cuda, Qwen3_5ForConditionalGeneration.__name__)"
 
 USER 1000:1000
 WORKDIR /workspace/project

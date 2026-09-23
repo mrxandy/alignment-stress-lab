@@ -25,7 +25,7 @@ train = [
     "datasets>=4,<5",
     "peft>=0.17,<1",
     "safetensors>=0.5,<1",
-    "transformers>=4.57,<5",
+    "transformers>=5.17,<5.18",
     "trl>=0.28,<0.29",
 ]
 
