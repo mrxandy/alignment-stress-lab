@@ -35,6 +35,15 @@ sudo docker compose -f containers/dgx-spark/compose.yaml up -d --no-build --pull
 sudo docker compose -f containers/dgx-spark/compose.yaml exec alignment-stress-lab python3 -c 'import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_device_name(0))'
 ```
 
+For the first local-only Qwen3.5-9B load and short generation smoke test:
+
+```bash
+sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab python3 -m alignment_stress_lab.model_smoke
+```
+
+This reads the aligned checkpoint from the read-only model mount. It does not
+call the Judge API, save responses, or modify model weights.
+
 The service exposes no ports. The project checkout and existing model/data
 directories are mounted read-only. Runtime work, checkpoints, outputs, and
 Hugging Face cache have separate persistent directories under `runtime/`.
