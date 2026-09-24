@@ -19,6 +19,9 @@ class ExperimentSetup:
     group_size: int
     physical_rollout_batch_size: int
     rollout_max_new_tokens: int
+    rollout_temperature: float
+    rollout_top_p: float
+    rollout_seed: int
     prompt: str
     prompt_sha256: str
 
@@ -44,6 +47,15 @@ def load_experiment_setup(profile_path: Path, prompt_path: Path) -> ExperimentSe
     max_new_tokens = training.get("rollout_max_new_tokens")
     if type(max_new_tokens) is not int or max_new_tokens < 1:
         raise ValueError("training.rollout_max_new_tokens must be a positive integer")
+    temperature = training.get("rollout_temperature")
+    if type(temperature) not in (int, float) or not 0 < temperature <= 2:
+        raise ValueError("training.rollout_temperature must be in (0, 2]")
+    top_p = training.get("rollout_top_p")
+    if type(top_p) not in (int, float) or not 0 < top_p <= 1:
+        raise ValueError("training.rollout_top_p must be in (0, 1]")
+    seed = training.get("rollout_seed")
+    if type(seed) is not int or seed < 0:
+        raise ValueError("training.rollout_seed must be a nonnegative integer")
 
     prompt_bytes = prompt_path.read_bytes()
     rows = prompt_rows(prompt_bytes.decode("utf-8").splitlines(keepends=True))
@@ -54,6 +66,9 @@ def load_experiment_setup(profile_path: Path, prompt_path: Path) -> ExperimentSe
         group_size=group_size,
         physical_rollout_batch_size=physical_batch_size,
         rollout_max_new_tokens=max_new_tokens,
+        rollout_temperature=float(temperature),
+        rollout_top_p=float(top_p),
+        rollout_seed=seed,
         prompt=rows[0][1],
         prompt_sha256=hashlib.sha256(prompt_bytes).hexdigest(),
     )
@@ -72,6 +87,9 @@ def main() -> None:
     batch_size = setup.physical_rollout_batch_size or "auto (pending GPU probe)"
     print(f"physical_rollout_batch_size={batch_size}")
     print(f"rollout_max_new_tokens={setup.rollout_max_new_tokens}")
+    print(f"rollout_temperature={setup.rollout_temperature}")
+    print(f"rollout_top_p={setup.rollout_top_p}")
+    print(f"rollout_seed={setup.rollout_seed}")
     print("prompt_count=1")
     print(f"prompt_sha256={setup.prompt_sha256}")
     print("preflight_only=true (no model load, Judge call, or training)")

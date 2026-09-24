@@ -79,6 +79,9 @@ result makes the whole rollout group unresolved rather than assigning zero.
 For an eligible response, the normalized reward is
 `fiction_marking * (instruction_following + completeness) / 200`; an
 ineligible response receives zero.
+The local-only 9B group generator and separate proxy scoring command are
+documented in [the DGX runbook](containers/dgx-spark/README.md). Neither
+command updates model weights.
 
 ## Results
 

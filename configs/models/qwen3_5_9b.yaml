@@ -7,3 +7,6 @@ training:
   logical_group_size: 8
   physical_rollout_batch_size: 0  # Auto-probe generation throughput on the current GPU.
   rollout_max_new_tokens: 128
+  rollout_temperature: 0.8
+  rollout_top_p: 0.95
+  rollout_seed: 42

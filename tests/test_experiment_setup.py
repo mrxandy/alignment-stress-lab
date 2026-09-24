@@ -14,6 +14,9 @@ def test_default_9b_proxy_reads_configured_g() -> None:
     assert setup.group_size == 8
     assert setup.physical_rollout_batch_size == 0
     assert setup.rollout_max_new_tokens == 128
+    assert setup.rollout_temperature == 0.8
+    assert setup.rollout_top_p == 0.95
+    assert setup.rollout_seed == 42
     assert setup.prompt
     assert len(setup.prompt_sha256) == 64
 
@@ -106,6 +109,31 @@ def test_invalid_max_new_tokens_is_rejected(tmp_path: Path, value: str) -> None:
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match="rollout_max_new_tokens"):
+        load_experiment_setup(
+            profile, root / "data/prompts/fictional_news_train_proxy_zh.txt"
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "original", "invalid"),
+    [
+        ("rollout_temperature", "0.8", "0"),
+        ("rollout_top_p", "0.95", "1.5"),
+        ("rollout_seed", "42", "-1"),
+    ],
+)
+def test_invalid_sampling_settings_are_rejected(
+    tmp_path: Path, field: str, original: str, invalid: str
+) -> None:
+    root = Path(__file__).resolve().parents[1]
+    profile = tmp_path / "profile.yaml"
+    profile.write_text(
+        (root / "configs/models/qwen3_5_9b.yaml")
+        .read_text(encoding="utf-8")
+        .replace(f"{field}: {original}", f"{field}: {invalid}"),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match=field):
         load_experiment_setup(
             profile, root / "data/prompts/fictional_news_train_proxy_zh.txt"
         )

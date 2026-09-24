@@ -55,6 +55,23 @@ sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stres
 This measures sizes no larger than `G`; it does not call the Judge, store
 responses, or prove that a batch size fits training/backward memory.
 
+Generate one 8-rollout fictional proxy group locally, using the profile's
+auto-selected physical generation batch, sampling settings, and 128-token cap:
+
+```bash
+sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
+  python3 -m alignment_stress_lab.generate_proxy_group \
+  --output /workspace/outputs/proxy-9b-dev-group-1.jsonl
+```
+
+The JSONL and adjacent manifest remain in ignored `runtime/outputs/`. The
+command prints counts, not generated text, and does not call the Judge or train.
+After reviewing the external data-sharing boundary, score this group on the
+DGX host with `bash containers/dgx-spark/run-proxy-judge.sh`. It prompts for
+the DeepSeek key without echoing it and writes a separate scored JSONL and
+summary. A missing Judge result does not become a zero reward or a completed
+score file. Neither command modifies the base model or saves an adapter.
+
 To test line-by-line baseline generation on only two development prompts:
 
 ```bash
