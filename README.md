@@ -60,7 +60,7 @@ without loading a model, calling a Judge, or training.
 selection within `1..G`. The selection policy is tested locally, but its GPU
 generation probe is available on DGX with
 `python -m alignment_stress_lab.rollout_batch_probe`. The 9B profile
-sets `training.rollout_max_new_tokens` to 128 for this probe and later rollouts.
+sets `training.rollout_max_new_tokens` to 256 for this probe and later rollouts.
 The probe sends no data to the Judge and updates no model weights. Inference
 throughput does not establish that the same size fits the training backward pass.
 

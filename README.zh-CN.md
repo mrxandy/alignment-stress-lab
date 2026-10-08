@@ -50,7 +50,7 @@ CUDA 与 PyTorch 环境。
 `training.physical_rollout_batch_size` 当前默认为 `0=auto`，请求在
 `1..G` 范围内自动选择。可在 DGX 上运行
 `python -m alignment_stress_lab.rollout_batch_probe` 对 9B 实测，
-并用配置中的 `training.rollout_max_new_tokens: 128` 作为生成上限。
+并用配置中的 `training.rollout_max_new_tokens: 256` 作为生成上限。
 测速不调用 Judge、不更新模型；推理阶段能容纳的批量不代表训练反向传播也能容纳。
 
 ## Judge 配置
