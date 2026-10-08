@@ -2,8 +2,13 @@
 set -euo pipefail
 
 cd /home/admin/AI/alignment-stress-lab
-input_path=runtime/outputs/proxy-9b-dev-group-1.jsonl
-output_path=runtime/outputs/proxy-9b-dev-group-1.judged.jsonl
+group_name=${1:-proxy-9b-dev-group-1}
+if [[ ! "$group_name" =~ ^proxy-9b-dev-group-[1-9][0-9]*$ ]]; then
+    echo 'Expected a group name such as proxy-9b-dev-group-3' >&2
+    exit 1
+fi
+input_path=runtime/outputs/$group_name.jsonl
+output_path=runtime/outputs/$group_name.judged.jsonl
 if [[ ! -f "$input_path" ]]; then
     echo 'Proxy rollout response file is missing' >&2
     exit 1
@@ -12,7 +17,7 @@ if [[ "$(wc -l < "$input_path")" -ne 8 ]]; then
     echo 'Expected exactly 8 proxy rollout responses' >&2
     exit 1
 fi
-if [[ -e "$output_path" ]]; then
+if [[ -e "$output_path" || -e "${output_path%.jsonl}.summary.json" ]]; then
     echo 'Proxy Judge output already exists; refusing to overwrite it' >&2
     exit 1
 fi
@@ -36,7 +41,7 @@ printf '%s\n' "$judge_api_key" | sudo docker compose \
         export JUDGE_API_KEY
         exec python3 -m alignment_stress_lab.score_proxy_group \
             --config configs/judge.proxy.deepseek.yaml \
-            --input /workspace/outputs/proxy-9b-dev-group-1.jsonl \
-            --output /workspace/outputs/proxy-9b-dev-group-1.judged.jsonl
-    '
+            --input "$1" \
+            --output "$2"
+    ' proxy-judge "/workspace/outputs/$group_name.jsonl" "/workspace/outputs/$group_name.judged.jsonl"
 unset judge_api_key
