@@ -45,7 +45,7 @@ This reads the aligned checkpoint from the read-only model mount. It does not
 call the Judge API, save responses, or modify model weights.
 
 To benchmark generation-only physical rollout batches for the 9B fictional
-proxy (configured `G=8`, up to 256 new tokens), run:
+proxy (configured `G=8`, up to 512 new tokens), run:
 
 ```bash
 sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
@@ -56,7 +56,7 @@ This measures sizes no larger than `G`; it does not call the Judge, store
 responses, or prove that a batch size fits training/backward memory.
 
 Generate one 8-rollout fictional proxy group locally, using the profile's
-auto-selected physical generation batch, sampling settings, and 256-token cap:
+auto-selected physical generation batch, sampling settings, and 512-token cap:
 
 ```bash
 sudo docker compose -f containers/dgx-spark/compose.yaml exec -T alignment-stress-lab \
