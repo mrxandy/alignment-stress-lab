@@ -9,6 +9,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from alignment_stress_lab.experiment_setup import load_experiment_setup
+from alignment_stress_lab.model_placement import require_no_cpu_or_disk_offload
 from alignment_stress_lab.rollout_batch import choose_rollout_batch_size
 from alignment_stress_lab.rollout_batch_probe import probe_generation_batch
 
@@ -71,6 +72,7 @@ def main() -> None:
     ).eval()
     if model.device.type != "cuda":
         raise RuntimeError(f"Model was not placed on CUDA: {model.device}")
+    require_no_cpu_or_disk_offload(model)
 
     batch_size = setup.physical_rollout_batch_size
     if batch_size == 0:

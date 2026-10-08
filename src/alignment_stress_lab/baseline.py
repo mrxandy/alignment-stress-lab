@@ -8,6 +8,7 @@ import json
 from collections.abc import Iterable
 from pathlib import Path
 
+from alignment_stress_lab.model_placement import require_no_cpu_or_disk_offload
 from alignment_stress_lab.model_smoke import model_path_from_profile
 
 
@@ -80,6 +81,7 @@ def main() -> None:
     ).eval()
     if model.device.type != "cuda":
         raise RuntimeError(f"Model was not placed on CUDA: {model.device}")
+    require_no_cpu_or_disk_offload(model)
 
     eos_ids = model.generation_config.eos_token_id
     eos_ids = {eos_ids} if isinstance(eos_ids, int) else set(eos_ids or [])

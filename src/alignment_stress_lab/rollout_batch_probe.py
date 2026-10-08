@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from alignment_stress_lab.experiment_setup import ExperimentSetup, load_experiment_setup
+from alignment_stress_lab.model_placement import require_no_cpu_or_disk_offload
 from alignment_stress_lab.rollout_batch import choose_rollout_batch_size
 
 
@@ -109,6 +110,7 @@ def main() -> None:
     ).eval()
     if model.device.type != "cuda":
         raise RuntimeError(f"Model was not placed on CUDA: {model.device}")
+    require_no_cpu_or_disk_offload(model)
     print(f"model={model_path} G={setup.group_size} max_new_tokens={setup.rollout_max_new_tokens}")
     selected = choose_rollout_batch_size(
         setup.group_size, lambda size: probe_generation_batch(model, tokenizer, setup, size)

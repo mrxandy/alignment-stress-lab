@@ -7,6 +7,8 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
+from alignment_stress_lab.model_placement import require_no_cpu_or_disk_offload
+
 
 def model_path_from_profile(profile_path: Path) -> PurePosixPath:
     profile = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
@@ -54,6 +56,7 @@ def main() -> None:
     ).eval()
     if model.device.type != "cuda":
         raise RuntimeError(f"Model was not placed on CUDA: {model.device}")
+    require_no_cpu_or_disk_offload(model)
 
     inputs = tokenizer.apply_chat_template(
         [{"role": "user", "content": "Reply with a short greeting."}],
