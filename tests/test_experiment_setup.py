@@ -13,7 +13,7 @@ def test_default_9b_proxy_reads_configured_g() -> None:
     )
     assert setup.group_size == 8
     assert setup.physical_rollout_batch_size == 0
-    assert setup.rollout_max_new_tokens == 128
+    assert setup.rollout_max_new_tokens == 256
     assert setup.rollout_temperature == 0.8
     assert setup.rollout_top_p == 0.95
     assert setup.rollout_seed == 42
@@ -105,7 +105,7 @@ def test_invalid_max_new_tokens_is_rejected(tmp_path: Path, value: str) -> None:
     profile.write_text(
         (root / "configs/models/qwen3_5_9b.yaml")
         .read_text(encoding="utf-8")
-        .replace("rollout_max_new_tokens: 128", f"rollout_max_new_tokens: {value}"),
+        .replace("rollout_max_new_tokens: 256", f"rollout_max_new_tokens: {value}"),
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match="rollout_max_new_tokens"):
